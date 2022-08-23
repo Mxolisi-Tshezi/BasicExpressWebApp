@@ -15,30 +15,17 @@ const flash = require('express-flash');
 const CategoryService = require('./services/category-service');
 const ProductService = require('./services/product-service');
 const UserService = require('./services/user-service');
+
 const pgp = require('pg-promise')();
 
-const DATABASE_URL= process.env.DATABASE_URL || "postgresql://localhost:5432/my_products_list";
-
-const config = { 
-	connectionString : DATABASE_URL
+let useSSL = false;
+let local = process.env.LOCAL || false;
+if (process.env.DATABASE_URL && !local){
+    useSSL = true;
 }
+const connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/my_products_list';
 
-if (process.env.NODE_ENV == 'production') {
-	config.ssl = { 
-		rejectUnauthorized : false
-	}
-}
-
-const db = pgp(config);
-
-// let useSSL = false;
-// let local = process.env.LOCAL || false;
-// if (process.env.DATABASE_URL && !local){
-//     useSSL = true;
-// }
-// const connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/my_products_list';
-
-// const db = pgp(connectionString);
+const db = pgp(connectionString);
 
 const categoryService = CategoryService(db);
 const productService = ProductService(db);
@@ -60,7 +47,7 @@ app.use(session({
 app.use(flash());
    
 //setup template handlebars as the template engine
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 app.use(express.static(__dirname + '/public'));
