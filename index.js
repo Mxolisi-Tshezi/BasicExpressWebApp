@@ -15,17 +15,21 @@ const flash = require('express-flash');
 const CategoryService = require('./services/category-service');
 const ProductService = require('./services/product-service');
 const UserService = require('./services/user-service');
-
 const pgp = require('pg-promise')();
+const DATABASE_URL= process.env.DATABASE_URL || 'postgresql://coder:pg123@localhost/my_products';
 
-let useSSL = false;
-let local = process.env.LOCAL || false;
-if (process.env.DATABASE_URL && !local){
-    useSSL = true;
+const config = { 
+	connectionString : DATABASE_URL
 }
-const connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/my_products_list';
 
-const db = pgp(connectionString);
+if (process.env.NODE_ENV == 'production') {
+	config.ssl = { 
+		rejectUnauthorized : false
+	}
+}
+
+const db = pgp(config);
+
 
 const categoryService = CategoryService(db);
 const productService = ProductService(db);

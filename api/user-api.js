@@ -28,7 +28,6 @@ module.exports = function (userService) {
             /*
                 - hash password back to normal
                 - use compare method to check if password match
-
                 --- exceptions/ events ---
                 - handle wrong password exception
                 - handle successfull event;
@@ -61,7 +60,6 @@ module.exports = function (userService) {
             - set-up salt
             - hash the password
             - call signUp service
-
             --- exception/ event ---
             - user already exists
             - handle successfull event

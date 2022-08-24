@@ -28,5 +28,3 @@ module.exports = function userModel() {
 }
 
 // export default [usernameIsValid, cryptPassword]
-
-

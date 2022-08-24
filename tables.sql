@@ -23,4 +23,3 @@ create table users (
 
 alter table categories add constraint uniq_desc_constraint unique(description);
 -- alter table users add createdAt DATE NOT NULL DEFAULT CURRENT_DATE unique(description);
-
